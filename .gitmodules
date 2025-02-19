@@ -1,0 +1,6 @@
+[submodule "third_party/spdlog"]
+	path = third_party/spdlog
+	url = https://github.com/gabime/spdlog.git
+[submodule "third_party/sanitizers-cmake"]
+	path = third_party/sanitizers-cmake
+	url = https://github.com/arsenm/sanitizers-cmake

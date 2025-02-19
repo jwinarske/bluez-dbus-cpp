@@ -10,19 +10,16 @@
 
 using namespace sdbus;
 
-class PropertiesExt_adaptor : public Properties_adaptor
-{
+class PropertiesExt_adaptor : public Properties_adaptor {
 public:
-    PropertiesExt_adaptor(sdbus::IObject& object)
-        : Properties_adaptor(object)
-    {
+    explicit PropertiesExt_adaptor(IObject &object)
+        : Properties_adaptor(object) {
     }
 
-    ~PropertiesExt_adaptor() = default;
+    virtual ~PropertiesExt_adaptor() = default;
 
 protected:
-    void emitPropertyChangedSignal( const std::string& interfaceName, const std::string& property )
-    {
-        emitPropertiesChangedSignal( interfaceName, std::vector<std::string>{ property } );
+    void emitPropertyChangedSignal(const std::string &interfaceName, const std::string &property) {
+        emitPropertiesChangedSignal(interfaceName, std::vector{property});
     }
 };

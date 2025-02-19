@@ -8,24 +8,18 @@
 
 #include "proxy/Device1_proxy.h"
 
-namespace org {
-namespace bluez {
+namespace org::bluez {
+    using namespace sdbus;
 
-using namespace sdbus;
+    class Device1 : public ProxyInterfaces<org::bluez::Device1_proxy> {
+    public:
+        Device1(IConnection &connection, std::string destination, std::string objectPath)
+            : ProxyInterfaces{connection, std::move(destination), std::move(objectPath)} {
+            registerProxy();
+        }
 
-class Device1 : public ProxyInterfaces<org::bluez::Device1_proxy>
-{
-public:
-    Device1( IConnection& connection, std::string destination, std::string objectPath )
-        : ProxyInterfaces{ connection, std::move(destination), std::move(objectPath) }
-    {
-        registerProxy();
-    }
-
-    ~Device1()
-    {
-        unregisterProxy();
-    }
-};
-
-}}
+        ~Device1() {
+            unregisterProxy();
+        }
+    };
+}

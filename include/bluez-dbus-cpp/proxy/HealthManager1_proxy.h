@@ -8,41 +8,35 @@
 
 #include <sdbus-c++/sdbus-c++.h>
 #include <string>
-#include <tuple>
 
-namespace org {
-namespace bluez {
 
-class HealthManager1_proxy
-{
-public:
-    static constexpr const char* INTERFACE_NAME = "org.bluez.HealthManager1";
+namespace org::bluez {
+    class HealthManager1_proxy {
+    public:
+        static constexpr auto INTERFACE_NAME = "org.bluez.HealthManager1";
 
-protected:
-    HealthManager1_proxy(sdbus::IProxy& proxy)
-        : proxy_(proxy)
-    {
-    }
+    protected:
+        explicit HealthManager1_proxy(sdbus::IProxy &proxy)
+            : proxy_(proxy) {
+        }
 
-    ~HealthManager1_proxy() = default;
+        ~HealthManager1_proxy() = default;
 
-public:
-    sdbus::ObjectPath CreateApplication(const std::map<std::string, sdbus::Variant>& config)
-    {
-        sdbus::ObjectPath result;
-        proxy_.callMethod("CreateApplication").onInterface(INTERFACE_NAME).withArguments(config).storeResultsTo(result);
-        return result;
-    }
+    public:
+        [[nodiscard]] sdbus::ObjectPath CreateApplication(const std::map<std::string, sdbus::Variant> &config) const {
+            sdbus::ObjectPath result;
+            proxy_.callMethod("CreateApplication").onInterface(INTERFACE_NAME).withArguments(config).
+                    storeResultsTo(result);
+            return result;
+        }
 
-    void DestroyApplication(const sdbus::ObjectPath& application)
-    {
-        proxy_.callMethod("DestroyApplication").onInterface(INTERFACE_NAME).withArguments(application);
-    }
+        void DestroyApplication(const sdbus::ObjectPath &application) const {
+            proxy_.callMethod("DestroyApplication").onInterface(INTERFACE_NAME).withArguments(application);
+        }
 
-private:
-    sdbus::IProxy& proxy_;
-};
-
-}} // namespaces
+    private:
+        sdbus::IProxy &proxy_;
+    };
+} // namespaces
 
 #endif

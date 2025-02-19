@@ -8,27 +8,24 @@
 
 #include "GattCharacteristicBuilder.h"
 
-namespace org {
-namespace bluez {
 
-class ReadOnlyCharacteristic :
-    public GattCharacteristicBuilder<ReadOnlyCharacteristic>
-{
-public:
-    ReadOnlyCharacteristic( std::shared_ptr<GattService1> service, std::string uuid, std::string value )
-        : GattCharacteristicBuilder{ move(service), move(uuid), false, false, true }
-    {
-        addFlag( "read" );
-        addValue( move(value) );
-    }
+namespace org::bluez {
+    class ReadOnlyCharacteristic final :
+            public GattCharacteristicBuilder<ReadOnlyCharacteristic> {
+    public:
+        ReadOnlyCharacteristic(const std::shared_ptr<GattService1> &service, const std::string &uuid,
+                               const std::string &value)
+            : GattCharacteristicBuilder{service, uuid, false, false, true} {
+            addFlag("read");
+            addValue(value);
+        }
 
-    static std::shared_ptr<ReadOnlyCharacteristic> createFinal(std::shared_ptr<GattService1> service, std::string uuid, std::string value )
-    {
-        auto self = new ReadOnlyCharacteristic{ move(service), move(uuid), move(value) };
-        auto shared = std::shared_ptr<ReadOnlyCharacteristic>( self );
-        self->registerWithService( shared );
-        return shared;
-    }
-};
-
-}}
+        static std::shared_ptr<ReadOnlyCharacteristic> createFinal(const std::shared_ptr<GattService1> &service,
+                                                                   const std::string &uuid, const std::string &value) {
+            const auto self = new ReadOnlyCharacteristic{service, uuid, value};
+            auto shared = std::shared_ptr<ReadOnlyCharacteristic>(self);
+            self->registerWithService(shared);
+            return shared;
+        }
+    };
+}

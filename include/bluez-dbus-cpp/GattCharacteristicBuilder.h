@@ -8,55 +8,47 @@
 
 #include "GattCharacteristic1.h"
 
-namespace org {
-namespace bluez {
 
-// Forward declarations
-class GattService1;
+namespace org::bluez {
+    // Forward declarations
+    class GattService1;
 
-using namespace sdbus;
+    using namespace sdbus;
 
 
-template<typename _Derived>
-class GattCharacteristicBuilder :
-    public GattCharacteristic1
-{
-protected:
-    GattCharacteristicBuilder( std::shared_ptr<GattService1> service,
-        std::string uuid,
-        bool hasAcquireWrite = false,
-        bool hasAcquireNotify = false,
-        bool hasValue = false,
-        bool valueIsDirected = false )
-        : GattCharacteristic1{ move(service), move(uuid), hasAcquireWrite, hasAcquireNotify, hasValue, valueIsDirected }
-    {
-    }
+    template<typename _Derived>
+    class GattCharacteristicBuilder :
+            public GattCharacteristic1 {
+    protected:
+        GattCharacteristicBuilder(const std::shared_ptr<GattService1> &service,
+                                  const std::string &uuid,
+                                  const bool hasAcquireWrite = false,
+                                  const bool hasAcquireNotify = false,
+                                  const bool hasValue = false,
+                                  const bool valueIsDirected = false)
+            : GattCharacteristic1{service, uuid, hasAcquireWrite, hasAcquireNotify, hasValue, valueIsDirected} {
+        }
 
-public:
-    _Derived& withValue( std::string value )
-    {
-        addValue( move(value) );
-        return static_cast<_Derived&>( *this );
-    }
+    public:
+        _Derived &withValue(const std::string &value) {
+            addValue(value);
+            return static_cast<_Derived &>(*this);
+        }
 
-    _Derived& withValue( std::vector<uint8_t> value )
-    {
-        addValue( move(value) );
-        return static_cast<_Derived&>( *this );
-    }
+        _Derived &withValue(const std::vector<uint8_t> &value) {
+            addValue(value);
+            return static_cast<_Derived &>(*this);
+        }
 
-    _Derived& withFlag( std::string flag )
-    {
-        addFlag( move(flag) );
-        return static_cast<_Derived&>( *this );
-    }
+        _Derived &withFlag(const std::string &flag) {
+            addFlag(flag);
+            return static_cast<_Derived &>(*this);
+        }
 
-    std::shared_ptr<_Derived> finalize()
-    {
-        auto self = std::shared_ptr<GattCharacteristicBuilder>( this );
-        registerWithService( self );
-        return std::static_pointer_cast<_Derived>(self);
-    }
-};
-
-}}
+        std::shared_ptr<_Derived> finalize() {
+            auto self = std::shared_ptr<GattCharacteristicBuilder>(this);
+            registerWithService(self);
+            return std::static_pointer_cast<_Derived>(self);
+        }
+    };
+}

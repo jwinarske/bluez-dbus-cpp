@@ -4,34 +4,32 @@
 // (See accompanying file LICENSE_1_0.txt or copy at https://www.boost.org/LICENSE_1_0.txt)
 //
 
-#ifndef __sdbuscpp_____src_bluez_adaptor_ObjectManagerExt_adaptor_h__adaptor__H__
-#define __sdbuscpp_____src_bluez_adaptor_ObjectManagerExt_adaptor_h__adaptor__H__
+#ifndef _sdbuscpp_src_bluez_adaptor_ObjectManagerExt_adaptor_h_adaptor_H_
+#define _sdbuscpp_src_bluez_adaptor_ObjectManagerExt_adaptor_h_adaptor_H_
 
 #include <sdbus-c++/sdbus-c++.h>
 #include <string>
-#include <tuple>
 
-namespace org {
-namespace bluez {
 
-class ObjectManagerExt_adaptor : public ObjectManager_adaptor
-{
-public:
-    static constexpr const char* INTERFACE_NAME = "org.freedesktop.DBus.ObjectManager";
+namespace org::bluez {
+    class ObjectManagerExt_adaptor : public ObjectManager_adaptor {
+    public:
+        static constexpr auto INTERFACE_NAME = "org.freedesktop.DBus.ObjectManager";
 
-protected:
-    ObjectManagerExt_adaptor(sdbus::IObject& object)
-        : ObjectManager_adaptor(object)
-    {
-        object.registerMethod("GetManagedObjects").onInterface(INTERFACE_NAME).implementedAs([this](){ return this->GetManagedObjects(); });
-    }
+    protected:
+        explicit ObjectManagerExt_adaptor(IObject &object)
+            : ObjectManager_adaptor(object) {
+            object.registerMethod("GetManagedObjects").onInterface(INTERFACE_NAME).implementedAs([this] {
+                return this->GetManagedObjects();
+            });
+        }
 
-    ~ObjectManagerExt_adaptor() = default;
+        ~ObjectManagerExt_adaptor() = default;
 
-private:
-    virtual std::map<sdbus::ObjectPath, std::map<std::string, std::map<std::string, sdbus::Variant>>> GetManagedObjects() = 0;
-};
-
-}} // namespaces
+    private:
+        virtual std::map<ObjectPath, std::map<std::string, std::map<std::string, Variant> > >
+        GetManagedObjects() = 0;
+    };
+} // namespaces
 
 #endif

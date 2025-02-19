@@ -8,50 +8,44 @@
 
 #include <sdbus-c++/sdbus-c++.h>
 
-namespace org {
-namespace bluez {
 
-using namespace sdbus;
+namespace org::bluez {
+    using namespace sdbus;
 
-class GattManager1 :
-    public std::enable_shared_from_this<GattManager1>
-{
-    std::unique_ptr<sdbus::IProxy> proxy_;
-    static constexpr const char* INTERFACE_NAME = "org.bluez.GattManager1";
+    class GattManager1 :
+            public std::enable_shared_from_this<GattManager1> {
+        std::unique_ptr<IProxy> proxy_;
+        static constexpr auto INTERFACE_NAME = "org.bluez.GattManager1";
 
-public:
-    GattManager1( IConnection& connection, std::string destination, std::string objectPath )
-        : proxy_{ createProxy( connection, std::move(destination), std::move(objectPath) ) }
-    {
-        proxy_->finishRegistration();
-    }
+    public:
+        GattManager1(IConnection &connection, std::string destination, std::string objectPath)
+            : proxy_{createProxy(connection, std::move(destination), std::move(objectPath))} {
+            proxy_->finishRegistration();
+        }
 
-    GattManager1( std::shared_ptr<sdbus::IConnection> connection, std::string destination, std::string objectPath )
-        : proxy_{ createProxy( *connection, std::move(destination), std::move(objectPath) ) }
-    {
-        proxy_->finishRegistration();
-    }
+        GattManager1(const std::shared_ptr<IConnection> &connection, std::string destination,
+                     std::string objectPath)
+            : proxy_{createProxy(*connection, std::move(destination), std::move(objectPath))} {
+            proxy_->finishRegistration();
+        }
 
-    ~GattManager1()
-    {
-        proxy_->unregister();
-    }
+        ~GattManager1() {
+            proxy_->unregister();
+        }
 
-public:
-    void RegisterApplication(const sdbus::ObjectPath& application, const std::map<std::string, sdbus::Variant>& options)
-    {
-        proxy_->callMethod("RegisterApplication").onInterface(INTERFACE_NAME).withArguments(application, options);
-    }
+        void RegisterApplication(const ObjectPath &application,
+                                 const std::map<std::string, Variant> &options) const {
+            proxy_->callMethod("RegisterApplication").onInterface(INTERFACE_NAME).withArguments(application, options);
+        }
 
-    AsyncMethodInvoker RegisterApplicationAsync( const sdbus::ObjectPath& application, const std::map<std::string, sdbus::Variant>& options )
-    {
-        return proxy_->callMethodAsync("RegisterApplication").onInterface(INTERFACE_NAME).withArguments(application, options);
-    }
+        AsyncMethodInvoker RegisterApplicationAsync(const ObjectPath &application,
+                                                    const std::map<std::string, Variant> &options) const {
+            return proxy_->callMethodAsync("RegisterApplication").onInterface(INTERFACE_NAME).withArguments(
+                application, options);
+        }
 
-    void UnregisterApplication(const sdbus::ObjectPath& application)
-    {
-        proxy_->callMethod("UnregisterApplication").onInterface(INTERFACE_NAME).withArguments(application);
-    }
-};
-
-}}
+        void UnregisterApplication(const ObjectPath &application) const {
+            proxy_->callMethod("UnregisterApplication").onInterface(INTERFACE_NAME).withArguments(application);
+        }
+    };
+}

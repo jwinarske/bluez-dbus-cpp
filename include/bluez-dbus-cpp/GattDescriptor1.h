@@ -11,78 +11,65 @@
 
 #include <sdbus-c++/sdbus-c++.h>
 
-namespace org {
-namespace bluez {
+namespace org::bluez {
+    // Forward declarations
+    class GattCharacteristic1;
 
-// Forward declarations
-class GattCharacteristic1;
+    using namespace sdbus;
 
-using namespace sdbus;
+    class GattDescriptor1 :
+            public AdaptorInterfaces<GattDescriptor1_adaptor, PropertiesExt_adaptor>,
+            public std::enable_shared_from_this<GattDescriptor1> {
+    public:
+        GattDescriptor1(const std::shared_ptr<GattCharacteristic1> &service, const std::string &name, std::string uuid);
 
-class GattDescriptor1 :
-    public AdaptorInterfaces<GattDescriptor1_adaptor, PropertiesExt_adaptor>,
-    public std::enable_shared_from_this<GattDescriptor1>
-{
-public:
-    GattDescriptor1( std::shared_ptr<GattCharacteristic1> service, std::string name, std::string uuid );
-    ~GattDescriptor1();
+        ~GattDescriptor1() override;
 
-public:
-    const std::string& getPath() const
-    {
-        return path_;
-    }
+        const std::string &getPath() const {
+            return path_;
+        }
 
-public:
-    virtual std::vector<uint8_t> ReadValue(const std::map<std::string, sdbus::Variant>& options)
-    {
-        throw sdbus::Error("org.bluez.Error.NotSupported", "Method 'ReadValue' default handler");
-    }
+        std::vector<uint8_t> ReadValue(const std::map<std::string, Variant> &options) override {
+            throw Error("org.bluez.Error.NotSupported", "Method 'ReadValue' default handler");
+        }
 
-    virtual void WriteValue(const std::vector<uint8_t>& value, const std::map<std::string, sdbus::Variant>& options)
-    {
-        throw sdbus::Error("org.bluez.Error.NotSupported", "Method 'WriteValue' default handler");
-    }
+        void WriteValue(const std::vector<uint8_t> &value,
+                        const std::map<std::string, Variant> &options) override {
+            throw Error("org.bluez.Error.NotSupported", "Method 'WriteValue' default handler");
+        }
 
-public:
-    /**
-     * @brief 
-     * 
-     * @return std::string 
+        /**
+     * @brief
+     *
+     * @return std::string
      */
-    virtual std::string UUID()
-    {
-        return uuid_;
-    }
+        std::string UUID() override {
+            return uuid_;
+        }
 
-    virtual sdbus::ObjectPath Characteristic()
-    {
-        // TODO implement
-        return sdbus::ObjectPath();
-    }
+        ObjectPath Characteristic() override {
+            // TODO implement
+            return {};
+        }
 
-    virtual std::vector<uint8_t> Value()
-    {
-        // TODO implement
-        return std::vector<uint8_t>();
-    }
+        std::vector<uint8_t> Value() override {
+            // TODO implement
+            return {};
+        }
 
-    virtual std::vector<std::string> Flags()
-    {
-        // TODO implement
-        return std::vector<std::string>();
-    }
+        std::vector<std::string> Flags() override {
+            // TODO implement
+            return {};
+        }
 
-protected:
-    void emitPropertyChangedSignal( const std::string& property )
-    {
-        PropertiesExt_adaptor::emitPropertyChangedSignal( GattDescriptor1_adaptor::INTERFACE_NAME, property );
-    }
+    protected:
+        void emitPropertyChangedSignal(const std::string &property) {
+            PropertiesExt_adaptor::emitPropertyChangedSignal(GattDescriptor1_adaptor::INTERFACE_NAME, property);
+        }
 
-    std::map<std::string,sdbus::Variant> dict_;
-    std::string path_;
-    std::string uuid_;
-    std::shared_ptr<GattCharacteristic1> characteristic_;
-};
-
-}}
+        std::map<std::string, Variant> dict_;
+        std::string path_;
+        std::string uuid_;
+        std::shared_ptr<GattCharacteristic1> characteristic_;
+    };
+}
