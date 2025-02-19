@@ -8,11 +8,17 @@
 add_executable(example
         example.cpp)
 
+add_sanitizers(example)
+
 target_include_directories(example PUBLIC
         $<BUILD_INTERFACE:${BLUEZ_HEADER_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
 
-target_link_libraries(example PRIVATE bluez-dbus-cpp)
+target_link_libraries(example
+        PRIVATE
+        bluez-dbus-cpp
+        spdlog
+)
 
 # Set output directory for binaries
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin/)

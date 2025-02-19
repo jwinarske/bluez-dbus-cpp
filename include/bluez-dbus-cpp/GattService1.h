@@ -27,11 +27,6 @@ namespace org::bluez {
         GattService1(const std::shared_ptr<GattApplication1> &app, const std::string &serviceName,
                      std::string serviceUUID);
 
-        static std::shared_ptr<GattService1> createWith(std::shared_ptr<GattApplication1> app, std::string serviceName,
-                                                        std::string serviceUUID);
-
-        std::shared_ptr<GattService1> andRegister();
-
         ~GattService1() override;
 
         virtual void addCharacteristic(std::shared_ptr<GattCharacteristic1> characteristic);

@@ -7,9 +7,11 @@
 #pragma once
 
 #include <sdbus-c++/sdbus-c++.h>
+
 #include <sys/socket.h>
 #include <cerrno>
 #include <cstring>
+#include <unistd.h>
 #include <utility>
 
 

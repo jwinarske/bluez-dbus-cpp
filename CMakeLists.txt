@@ -1,23 +1,26 @@
 ##
+# Copyright Joel Winarske 2025.
 # Copyright Audiofile LLC 2019 - 2020.
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or copy at https://www.boost.org/LICENSE_1_0.txt)
 ##
 
-# Minimal version of CMake
-cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.10.2)
 
-# Build type
-if (NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
-    message(STATUS "Setting build type to 'Release' as none was specified.")
-    set(CMAKE_BUILD_TYPE Release CACHE STRING "Choose the type of build." FORCE)
-    # Set the possible values of build type for cmake-gui
-    set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release"
-            "MinSizeRel" "RelWithDebInfo")
+if (NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE "Release" CACHE STRING "Choose the type of build, options are: Debug, Release, RelWithDebInfo, or MinSizeRel." FORCE)
+    message(STATUS "CMAKE_BUILD_TYPE not set, defaulting to Release.")
 endif ()
 
-# Define project name
-project(bluez-dbus-cpp VERSION 0.0.1 LANGUAGES C CXX)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/third_party/sanitizers-cmake/cmake)
+
+project(bluez-dbus-cpp
+        VERSION 0.0.1
+        LANGUAGES C CXX
+)
+
+add_subdirectory(third_party)
 
 # Installation directories for `install` command and pkgconfig file
 include(GNUInstallDirs)
@@ -79,6 +82,8 @@ add_library(bluez-dbus-cpp SHARED
         ${BLUEZ_SOURCES}
         ${BLUEZ_HEADERS})
 
+add_sanitizers(bluez-dbus-cpp)
+
 target_include_directories(bluez-dbus-cpp PUBLIC
         $<BUILD_INTERFACE:${BLUEZ_HEADER_DIR}>
         $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
@@ -97,7 +102,14 @@ set_target_properties(bluez-dbus-cpp
 
 # Link up
 find_package(sdbus-c++ REQUIRED)
-target_link_libraries(bluez-dbus-cpp PUBLIC SDBusCpp::sdbus-c++)
+target_link_libraries(bluez-dbus-cpp
+        PUBLIC
+        SDBusCpp::sdbus-c++
+)
+target_link_libraries(bluez-dbus-cpp
+        PRIVATE
+        spdlog
+)
 
 #-------------------------------
 # INSTALL

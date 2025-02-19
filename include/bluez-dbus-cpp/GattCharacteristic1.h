@@ -12,8 +12,6 @@
 
 #include <sdbus-c++/sdbus-c++.h>
 
-#include <iostream>
-
 
 namespace org::bluez {
     // Forward declarations
