@@ -8,23 +8,18 @@
 
 #include "GattCharacteristicBuilder.h"
 
-namespace org {
-namespace bluez {
 
-class GenericCharacteristic :
-    public GattCharacteristicBuilder<GenericCharacteristic>
-{
-public:
-    GenericCharacteristic( std::shared_ptr<GattService1> service, std::string uuid )
-        : GattCharacteristicBuilder{ move(service), move(uuid), false, false, true }
-    {
-    }
+namespace org::bluez {
+    class GenericCharacteristic final :
+            public GattCharacteristicBuilder<GenericCharacteristic> {
+    public:
+        GenericCharacteristic(const std::shared_ptr<GattService1> &service, const std::string &uuid)
+            : GattCharacteristicBuilder{service, uuid, false, false, true} {
+        }
 
-    static GenericCharacteristic& create(std::shared_ptr<GattService1> service, std::string uuid)
-    {
-        auto self = new GenericCharacteristic{ move(service), move(uuid) };
-        return *self;
-    }
-};
-
-}}
+        static GenericCharacteristic &create(const std::shared_ptr<GattService1> &service, const std::string &uuid) {
+            const auto self = new GenericCharacteristic{service, uuid};
+            return *self;
+        }
+    };
+}

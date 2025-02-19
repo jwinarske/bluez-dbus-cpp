@@ -7,7 +7,7 @@
 <node>
     <interface name="org.bluez.LEAdvertisingManager1">
         <method name="RegisterAdvertisement">
-            <annotation name="org.freedesktop.DBus.Method.Async" value="clientserver" />
+            <annotation name="org.freedesktop.DBus.Method.Async" value="clientserver"/>
             <arg name="advertisement" type="o" direction="in"/>
             <arg name="options" type="a{sv}" direction="in"/>
         </method>

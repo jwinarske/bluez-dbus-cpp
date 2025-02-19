@@ -1,6 +1,7 @@
 # bluez-dbus-cpp
 
-Depending on the beautiful `sdbus-cpp` library, this library features class implementations for the most important LE-Advertisement and Gatt functions .
+Depending on the beautiful `sdbus-cpp` library, this library features class implementations for the most important
+LE-Advertisement and Gatt functions .
 
 ## Dependencies
 
@@ -10,7 +11,8 @@ Depending on the beautiful `sdbus-cpp` library, this library features class impl
 
 Please note that in order to comply with the LPGL license of sdbus-cpp, it is important to link against it dynamically.
 
-Kistler have provided bitbake recipes for integrating `sdbus-cpp` into a yocto build. https://github.com/Kistler-Group/sdbus-cpp/blob/master/docs/using-sdbus-c++.md#yocto
+Kistler have provided bitbake recipes for integrating `sdbus-cpp` into a yocto
+build. https://github.com/Kistler-Group/sdbus-cpp/blob/master/docs/using-sdbus-c++.md#yocto
 
 ## Building (with example)
 
@@ -36,6 +38,7 @@ From the `build` directory
 ```
 
 ## Building for install
+
 ```
 mkdir build
 cd build

@@ -12,87 +12,83 @@
 
 #include <sdbus-c++/sdbus-c++.h>
 
-namespace org {
-namespace bluez {
+namespace org::bluez {
+    // Forward declarations
+    class GattApplication1;
 
-// Forward declarations
-class GattApplication1;
+    using namespace sdbus;
 
-using namespace sdbus;
+    class GattService1 :
+            public AdaptorInterfaces<GattService1_adaptor, PropertiesExt_adaptor>,
+            public std::enable_shared_from_this<GattService1> {
+    public:
+        GattService1(const GattService1 &service) = delete;
 
-class GattService1 :
-    public AdaptorInterfaces<GattService1_adaptor, PropertiesExt_adaptor>,
-    public std::enable_shared_from_this<GattService1>
-{
-    GattService1( const GattService1& service ) = delete;
+        GattService1(const std::shared_ptr<GattApplication1> &app, const std::string &serviceName,
+                     std::string serviceUUID);
 
-public:
-    GattService1( std::shared_ptr<GattApplication1> app, std::string serviceName, std::string serviceUUID );
+        static std::shared_ptr<GattService1> createWith(std::shared_ptr<GattApplication1> app, std::string serviceName,
+                                                        std::string serviceUUID);
 
-public:
-    static std::shared_ptr<GattService1> createWith( std::shared_ptr<GattApplication1> app, std::string serviceName, std::string serviceUUID );
-    std::shared_ptr<GattService1> andRegister();
-    ~GattService1();
+        std::shared_ptr<GattService1> andRegister();
 
-public:
-    virtual void addCharacteristic( std::shared_ptr<GattCharacteristic1> characteristic );
-    virtual void removeCharacteristic( std::shared_ptr<GattCharacteristic1> characteristic );
-    virtual void addSubService( std::shared_ptr<GattService1> service );
-    virtual void removeSubService( std::shared_ptr<GattService1> service );
-    virtual const std::string& getPath() const final;
-    virtual std::shared_ptr<IConnection> getConnection() const final;
-    virtual int nextCharacteristicIndex() const final;
+        ~GattService1() override;
 
-public:
-    /**
-     * @brief 
-     * 
-     * @return std::string 
+        virtual void addCharacteristic(std::shared_ptr<GattCharacteristic1> characteristic);
+
+        virtual void removeCharacteristic(const std::shared_ptr<GattCharacteristic1> &characteristic);
+
+        virtual void addSubService(std::shared_ptr<GattService1> service);
+
+        virtual void removeSubService(const std::shared_ptr<GattService1> &service);
+
+        virtual const std::string &getPath() const;
+
+        virtual std::shared_ptr<IConnection> getConnection() const;
+
+        virtual int nextCharacteristicIndex() const;
+
+        /**
+     * @brief
+     *
+     * @return std::string
      */
-    virtual std::string UUID()
-    {
-        return uuid_;
-    }
+        std::string UUID() override {
+            return uuid_;
+        }
 
-    virtual void UUID( const std::string& uuid )
-    {
-        uuid_ = uuid;
-    }
+        virtual void UUID(const std::string &uuid) {
+            uuid_ = uuid;
+        }
 
-    virtual bool Primary()
-    {
-        return primary_;
-    }
+        bool Primary() override {
+            return primary_;
+        }
 
-    virtual void Primary( bool primary )
-    {
-        primary_ = primary;
-    }
+        virtual void Primary(const bool primary) {
+            primary_ = primary;
+        }
 
-    virtual std::vector<sdbus::ObjectPath> Includes()
-    {
-        return includes_;
-    }
+        std::vector<ObjectPath> Includes() override {
+            return includes_;
+        }
 
-    virtual void Includes( std::vector<sdbus::ObjectPath>&& includes )
-    {
-        includes_ = std::move( includes );
-    }
+        virtual void Includes(std::vector<ObjectPath> &&includes) {
+            includes_ = std::move(includes);
+        }
 
-protected:
-    void emitPropertyChangedSignal( const std::string& property )
-    {
-        PropertiesExt_adaptor::emitPropertyChangedSignal( GattService1_adaptor::INTERFACE_NAME, property );
-    }
+    protected:
+        void emitPropertyChangedSignal(const std::string &property) {
+            PropertiesExt_adaptor::emitPropertyChangedSignal(GattService1_adaptor::INTERFACE_NAME, property);
+        }
 
-    std::shared_ptr<GattApplication1> app_;
-    std::string path_;
-    std::string uuid_;
-    bool primary_;
+        std::shared_ptr<GattApplication1> app_;
+        std::string path_;
+        std::string uuid_;
+        bool primary_;
 
-    std::vector<std::shared_ptr<GattService1>> services_;
-    std::vector<std::shared_ptr<GattCharacteristic1>> characteristics_;
-    std::vector<sdbus::ObjectPath> includes_;
-};
-
-}}
+        std::vector<std::shared_ptr<GattService1> > services_;
+        std::vector<std::shared_ptr<GattCharacteristic1> > characteristics_;
+        std::vector<ObjectPath> includes_;
+    };
+}

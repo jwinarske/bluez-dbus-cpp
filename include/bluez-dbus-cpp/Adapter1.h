@@ -8,24 +8,18 @@
 
 #include "proxy/Adapter1_proxy.h"
 
-namespace org {
-namespace bluez {
+namespace org::bluez {
+    using namespace sdbus;
 
-using namespace sdbus;
+    class Adapter1 : public ProxyInterfaces<Adapter1_proxy> {
+    public:
+        Adapter1(IConnection &connection, std::string destination, std::string objectPath)
+            : ProxyInterfaces{connection, std::move(destination), std::move(objectPath)} {
+            registerProxy();
+        }
 
-class Adapter1 : public ProxyInterfaces<org::bluez::Adapter1_proxy>
-{
-public:
-    Adapter1( IConnection& connection, std::string destination, std::string objectPath )
-        : ProxyInterfaces{ connection, std::move(destination), std::move(objectPath) }
-    {
-        registerProxy();
-    }
-
-    ~Adapter1()
-    {
-        unregisterProxy();
-    }
-};
-
-}}
+        ~Adapter1() {
+            unregisterProxy();
+        }
+    };
+}
